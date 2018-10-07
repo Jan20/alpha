@@ -1,10 +1,67 @@
-import * as functions from 'firebase-functions';
+import * as functions from 'firebase-functions'
+import * as express from 'express'
+import { AlphaService } from './alpha/alpha-service'
 
-// Start writing Firebase Functions
-// https://firebase.google.com/docs/functions/typescript
+/////////////////////
+// Cloud Functions //
+/////////////////////
+/**
+ * 
+ * Whenever the "api" URL endpoint is called, 
+ * the request gets forwarded to an express
+ * application.
+ * 
+ */
+export const api = functions.https.onRequest( (req, res) => {
+	
+	return application(req, res)
 
-export const helloWorld = functions.https.onRequest((request, response) => {
+})
 
-    response.send("Hello from Firebase!");
+///////////////
+// Functions //
+///////////////
+/**
+ * 
+ * Defines a new express application
+ * 
+ */
+const application = express()
 
-});
+/**
+ * 
+ * Async Middleware intended to serve as callback function for
+ * a given request.
+ * 
+ * @param callBackFunction 
+ * 
+ */
+const asyncMiddleware = callBackFunction => (req, res, next) => {
+
+	Promise.resolve(callBackFunction(req, res, next)).catch(next)
+
+}
+
+/**
+ * 
+ * 
+ * 
+ */
+application.post('/alpha/:symbol', asyncMiddleware(async (req, res, next) => {
+	
+	await AlphaService.getInstance().fetchAlpha(req.params['symbol'])
+
+	let responseHasNotBeenSentYet = true
+
+	await AlphaService.getInstance().alphaSubject.subscribe(json => {
+	
+		if (responseHasNotBeenSentYet) {
+
+			responseHasNotBeenSentYet = false
+			res.status(200).send(json)
+		
+		}
+		
+	});
+
+}))
