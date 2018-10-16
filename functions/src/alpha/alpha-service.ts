@@ -35,7 +35,7 @@ export class AlphaService {
    public async fetchAlpha(symbol: string): Promise<void> {
 
         const chunks = []
-        const url = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${symbol}&outputsize=full&apikey=6404`
+        const url = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${symbol}&outputsize=compact&apikey=6404`
 
         request.get(url).on('data', response => {
             

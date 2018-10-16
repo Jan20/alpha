@@ -28,8 +28,9 @@ class AlphaService {
     ///////////////
     /**
     *
-    * Simple function to access the Alpha Vantage API. Function makes a call and write all relevant datapoints back
-    * into a Firestore realtime database
+    * Simple function to access AlphaVantage's API.
+    * The function calls the API and writes all relevant
+    * datapoints into a connected Firestore realtime database
     *
     * @param symbol - a string referring to an arbitrary stock market symbol
     *
@@ -37,7 +38,7 @@ class AlphaService {
     fetchAlpha(symbol) {
         return __awaiter(this, void 0, void 0, function* () {
             const chunks = [];
-            const url = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${symbol}&outputsize=full&apikey=6404`;
+            const url = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${symbol}&outputsize=compact&apikey=6404`;
             request.get(url).on('data', response => {
                 chunks.push(response);
             }).on('end', () => {
@@ -54,14 +55,11 @@ class AlphaService {
             });
         });
     }
-    /////////////
-    // Getters //
-    /////////////
     /**
      *
      *
      *
-     * @returns - an instance of an AlphaService
+     * @returns: An instance of an AlphaService
      *
      */
     static getInstance() {
@@ -70,6 +68,9 @@ class AlphaService {
         }
         return this.instance;
     }
+    /////////////
+    // Getters //
+    /////////////
     /**
      *
      * Function that is used to return a JSON

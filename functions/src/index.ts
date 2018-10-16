@@ -2,6 +2,18 @@ import * as functions from 'firebase-functions'
 import * as express from 'express'
 import { AlphaService } from './alpha/alpha-service'
 
+
+
+///////////////
+// Functions //
+///////////////
+/**
+ * 
+ * Defines a new express application
+ * 
+ */
+const application = express()
+
 /////////////////////
 // Cloud Functions //
 /////////////////////
@@ -17,16 +29,6 @@ export const api = functions.https.onRequest( (req, res) => {
 	return application(req, res)
 
 })
-
-///////////////
-// Functions //
-///////////////
-/**
- * 
- * Defines a new express application
- * 
- */
-const application = express()
 
 /**
  * 

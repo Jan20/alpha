@@ -11,12 +11,28 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const functions = require("firebase-functions");
 const express = require("express");
 const alpha_service_1 = require("./alpha/alpha-service");
+///////////////
+// Functions //
+///////////////
 /**
  *
  * Defines a new express application
  *
  */
 const application = express();
+/////////////////////
+// Cloud Functions //
+/////////////////////
+/**
+ *
+ * Whenever the "api" URL endpoint is called,
+ * the request gets forwarded to an express
+ * application.
+ *
+ */
+exports.api = functions.https.onRequest((req, res) => {
+    return application(req, res);
+});
 /**
  *
  * Async Middleware intended to serve as callback function for
@@ -43,16 +59,4 @@ application.post('/alpha/:symbol', asyncMiddleware((req, res, next) => __awaiter
         }
     });
 })));
-/**
- *
- *
- *
- */
-exports.api = functions.https.onRequest((req, res) => {
-    console.log(req.path);
-    console.log(req.url);
-    // !req.path ? req.url = `/${req.url}` : null
-    console.log(req.url);
-    return application(req, res);
-});
 //# sourceMappingURL=index.js.map
